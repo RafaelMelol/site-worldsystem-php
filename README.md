@@ -30,13 +30,3 @@ cd build
 npm install
 npm run css
 ```
-
-## Rodando localmente
-
-```bash
-php -S localhost:8080 -t public_html
-```
-
-## Publicação
-
-Envie o conteúdo de `public_html/` para a pasta pública da hospedagem. É preciso PHP 8 e o Apache com `mod_rewrite` para os endereços sem `.php`.
