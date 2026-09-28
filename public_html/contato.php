@@ -28,7 +28,7 @@ require __DIR__ . '/inc/layout-topo.php';
 
     <div class="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.3fr]">
       <?= revelar_abre(0, 'flex flex-col gap-5') ?>
-        <div class="flex flex-col items-start gap-4 rounded-xl border border-brand-200 bg-brand-50/40 p-7 transition-colors duration-300 ease-out sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex flex-col items-start gap-4 rounded-xl border border-border-subtle bg-surface p-7 transition-colors duration-300 ease-out sm:flex-row sm:items-center sm:justify-between">
           <div class="flex items-start gap-4">
             <?= icone('balao', 'mt-0.5 size-5 shrink-0 text-brand-fg') ?>
             <div>

@@ -115,13 +115,26 @@
 
   if (botaoMenu && menuMobile) {
     botaoMenu.addEventListener('click', function () {
-      var aberto = !menuMobile.hidden;
-      menuMobile.hidden = aberto;
+      var aberto = menuMobile.classList.contains('aberto');
+      menuMobile.classList.toggle('aberto', !aberto);
       botaoMenu.setAttribute('aria-expanded', String(!aberto));
       botaoMenu.setAttribute('aria-label', aberto ? 'Abrir menu' : 'Fechar menu');
       botaoMenu.querySelector('[data-icone-menu]').hidden = !aberto;
       botaoMenu.querySelector('[data-icone-fechar]').hidden = aberto;
+      // Trava a rolagem da página enquanto o menu cobre a tela.
       document.body.style.overflow = aberto ? '' : 'hidden';
+
+      // Com o menu aberto o cabeçalho fica opaco, mesmo no topo da página.
+      if (aberto) {
+        ajustarCabecalho();
+      } else if (cabecalho) {
+        comFundo.forEach(function (classe) {
+          cabecalho.classList.add(classe);
+        });
+        semFundo.forEach(function (classe) {
+          cabecalho.classList.remove(classe);
+        });
+      }
     });
   }
 
@@ -129,8 +142,8 @@
     botao.addEventListener('click', function () {
       var painel = document.querySelector('[data-painel-mobile="' + botao.dataset.submenuMobile + '"]');
       if (!painel) return;
-      var aberto = !painel.hidden;
-      painel.hidden = aberto;
+      var aberto = painel.classList.contains('aberto');
+      painel.classList.toggle('aberto', !aberto);
       botao.setAttribute('aria-expanded', String(!aberto));
       botao.querySelector('svg').classList.toggle('rotate-180', !aberto);
     });
@@ -140,7 +153,7 @@
 
   function fecharSubmenus() {
     document.querySelectorAll('[data-painel-submenu]').forEach(function (painel) {
-      painel.hidden = true;
+      painel.classList.remove('aberto');
     });
     document.querySelectorAll('[data-submenu]').forEach(function (botao) {
       botao.setAttribute('aria-expanded', 'false');
@@ -153,10 +166,10 @@
       evento.stopPropagation();
       var painel = document.querySelector('[data-painel-submenu="' + botao.dataset.submenu + '"]');
       if (!painel) return;
-      var aberto = !painel.hidden;
+      var aberto = painel.classList.contains('aberto');
       fecharSubmenus();
       if (!aberto) {
-        painel.hidden = false;
+        painel.classList.add('aberto');
         botao.setAttribute('aria-expanded', 'true');
         botao.querySelector('svg').classList.add('rotate-180');
       }
@@ -170,7 +183,7 @@
   document.addEventListener('keydown', function (evento) {
     if (evento.key !== 'Escape') return;
     fecharSubmenus();
-    if (menuMobile && !menuMobile.hidden && botaoMenu) botaoMenu.click();
+    if (menuMobile && menuMobile.classList.contains('aberto') && botaoMenu) botaoMenu.click();
   });
 
   /* Abas de recursos ------------------------------------------------------- */

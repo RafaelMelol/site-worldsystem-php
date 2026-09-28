@@ -29,12 +29,12 @@ $atual = pagina_atual();
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <?php endif; ?>
-<link rel="icon" href="<?= url('assets/img/icone.png') ?>" type="image/png">
-<link rel="apple-touch-icon" href="<?= url('assets/img/icone.png') ?>">
+<link rel="icon" href="<?= arquivo('assets/img/icone.png') ?>" type="image/png">
+<link rel="apple-touch-icon" href="<?= arquivo('assets/img/icone.png') ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="<?= url('assets/css/site.css') ?>">
+<link rel="stylesheet" href="<?= arquivo('assets/css/site.css') ?>">
 <script>
   // Aplica o tema salvo antes de a página aparecer, para não piscar no tema errado.
   try {
@@ -57,7 +57,7 @@ $atual = pagina_atual();
   <div class="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 py-3 lg:px-8">
     <a href="<?= url() ?>" aria-label="World System - Página inicial" class="shrink-0 transition-transform duration-200 hover:scale-[1.03] active:scale-[0.98]">
       <span class="inline-flex items-center">
-        <img src="<?= url('assets/img/logo.png') ?>" alt="World System" width="1569" height="281" class="logo-mark h-10 w-auto sm:h-11">
+        <img src="<?= arquivo('assets/img/logo.png') ?>" alt="World System" width="1569" height="281" class="logo-mark h-10 w-auto sm:h-11">
       </span>
     </a>
 
@@ -67,18 +67,18 @@ $atual = pagina_atual();
           <li class="relative">
             <?php if (!empty($item['filhos'])): ?>
               <button type="button" aria-expanded="false" data-submenu="<?= e($item['titulo']) ?>"
-                class="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-surface-muted hover:text-foreground">
+                class="item-menu flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-foreground/80">
                 <?= e($item['titulo']) ?>
                 <?= icone('seta-baixo', 'size-3.5 transition-transform duration-200') ?>
               </button>
-              <div data-painel-submenu="<?= e($item['titulo']) ?>" hidden
-                class="absolute left-0 top-full z-10 mt-2 w-64 origin-top overflow-hidden rounded-lg border border-border-subtle bg-surface py-2 shadow-elevated">
+              <div data-painel-submenu="<?= e($item['titulo']) ?>"
+                class="submenu absolute left-0 top-full z-10 mt-2 w-64 overflow-hidden rounded-lg border border-border-subtle bg-surface py-2 shadow-elevated">
                 <?php foreach ($item['filhos'] as $filho): ?>
                   <a href="<?= e(url($filho['link'])) ?>" class="block px-4 py-2.5 text-sm text-foreground/80 transition-colors hover:bg-surface-muted hover:text-foreground"><?= e($filho['titulo']) ?></a>
                 <?php endforeach; ?>
               </div>
             <?php else: ?>
-              <a href="<?= e(url($item['link'])) ?>" class="block rounded-lg px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-surface-muted hover:text-foreground"><?= e($item['titulo']) ?></a>
+              <a href="<?= e(url($item['link'])) ?>" class="item-menu block rounded-lg px-4 py-2 text-sm font-medium text-foreground/80"><?= e($item['titulo']) ?></a>
             <?php endif; ?>
           </li>
         <?php endforeach; ?>
@@ -100,35 +100,50 @@ $atual = pagina_atual();
     </div>
   </div>
 
-  <div id="menu-mobile" hidden class="overflow-hidden border-t border-border-subtle bg-surface xl:hidden">
-    <div class="max-h-[calc(100dvh-4.5rem)] overflow-y-auto px-6 pb-8 pt-4">
+</header>
+
+<!-- Fica fora do <header> de propósito: o desfoque do cabeçalho faria o
+     navegador posicionar este menu dentro dele, e não na tela toda. -->
+<div id="menu-mobile" class="menu-mobile fixed inset-x-0 bottom-0 top-18 z-40 overflow-y-auto border-t border-border-subtle bg-surface xl:hidden">
+    <div class="flex min-h-full flex-col px-6 pb-10 pt-6">
       <ul class="flex flex-col gap-1">
         <?php foreach (MENU as $item): ?>
           <li>
             <?php if (!empty($item['filhos'])): ?>
               <div>
                 <button type="button" aria-expanded="false" data-submenu-mobile="<?= e($item['titulo']) ?>"
-                  class="flex w-full items-center justify-between rounded-lg px-3 py-3 text-base font-medium text-foreground">
+                  class="flex w-full items-center justify-between rounded-lg px-3 py-4 text-lg font-medium text-foreground">
                   <?= e($item['titulo']) ?>
                   <?= icone('seta-baixo', 'size-4 transition-transform') ?>
                 </button>
-                <div data-painel-mobile="<?= e($item['titulo']) ?>" hidden>
+                <div data-painel-mobile="<?= e($item['titulo']) ?>" class="submenu-mobile">
                   <ul class="ml-3 flex flex-col gap-1 border-l border-border-subtle pl-3">
                     <?php foreach ($item['filhos'] as $filho): ?>
-                      <li><a href="<?= e(url($filho['link'])) ?>" class="block rounded-lg px-3 py-2.5 text-sm text-foreground/70"><?= e($filho['titulo']) ?></a></li>
+                      <li><a href="<?= e(url($filho['link'])) ?>" class="block rounded-lg px-3 py-3 text-base text-foreground/70"><?= e($filho['titulo']) ?></a></li>
                     <?php endforeach; ?>
                   </ul>
                 </div>
               </div>
             <?php else: ?>
-              <a href="<?= e(url($item['link'])) ?>" class="block rounded-lg px-3 py-3 text-base font-medium text-foreground"><?= e($item['titulo']) ?></a>
+              <a href="<?= e(url($item['link'])) ?>" class="block rounded-lg px-3 py-4 text-lg font-medium text-foreground"><?= e($item['titulo']) ?></a>
             <?php endif; ?>
           </li>
         <?php endforeach; ?>
       </ul>
-      <a href="<?= url('contato.php') ?>" class="<?= classes_botao('primario', 'md', 'mt-4 w-full') ?>">Fale com a World System</a>
+
+      <div class="mt-auto pt-10">
+        <a href="<?= url('contato.php') ?>" class="<?= classes_botao('primario', 'lg', 'w-full') ?>">Fale com a World System</a>
+        <div class="mt-6 flex flex-col gap-3 text-sm text-foreground/70">
+          <a href="tel:<?= e(CONTATO['telefone']) ?>" class="flex items-center gap-2.5">
+            <?= icone('telefone', 'size-4 shrink-0 text-brand-fg') ?><?= e(CONTATO['telefone_exibicao']) ?>
+          </a>
+          <a href="mailto:<?= e(CONTATO['email']) ?>" class="flex items-center gap-2.5">
+            <?= icone('email', 'size-4 shrink-0 text-brand-fg') ?><?= e(CONTATO['email']) ?>
+          </a>
+        </div>
+        <?= redes_sociais('mt-6') ?>
+      </div>
     </div>
-  </div>
-</header>
+</div>
 
 <main id="conteudo" class="flex-1 pt-18">

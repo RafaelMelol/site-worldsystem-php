@@ -8,7 +8,7 @@
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
       <div>
         <span class="inline-flex items-center">
-          <img src="<?= url('assets/img/logo.png') ?>" alt="World System" width="1569" height="281" class="logo-mark h-10 w-auto sm:h-11">
+          <img src="<?= arquivo('assets/img/logo.png') ?>" alt="World System" width="1569" height="281" class="logo-mark h-10 w-auto sm:h-11">
         </span>
         <p class="mt-4 max-w-xs text-sm leading-relaxed text-foreground/70">
           Soluções em TI para gestão e automação de pequenas indústrias, atacados e varejos desde 1993.
@@ -62,6 +62,6 @@
   </div>
 </footer>
 
-<script src="<?= url('assets/js/site.js') ?>" defer></script>
+<script src="<?= arquivo('assets/js/site.js') ?>" defer></script>
 </body>
 </html>

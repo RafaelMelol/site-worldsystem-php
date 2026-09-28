@@ -36,6 +36,21 @@ function url(string $caminho = ''): string
     return '/' . ltrim($caminho, '/');
 }
 
+/**
+ * Caminho de um arquivo de CSS, JS ou imagem com a data da última alteração
+ * no fim (ex: /assets/js/site.js?v=1790000000).
+ *
+ * Sem isso, o navegador continua usando a versão guardada em cache depois de
+ * uma atualização — e uma mistura de CSS novo com JS antigo quebra a página.
+ */
+function arquivo(string $caminho): string
+{
+    $completo = __DIR__ . '/../' . ltrim($caminho, '/');
+    $versao = is_file($completo) ? filemtime($completo) : time();
+
+    return url($caminho) . '?v=' . $versao;
+}
+
 /** Marca o item do menu correspondente à página aberta. */
 function pagina_atual(): string
 {
