@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /envio/
+Disallow: /marketplace.php
+
+Sitemap: https://www.wsionline.com.br/sitemap.php

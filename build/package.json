@@ -1,0 +1,12 @@
+{
+  "name": "site-worldsystem-php-build",
+  "private": true,
+  "description": "Gera o CSS do site a partir do Tailwind. Só é usado no desenvolvimento; a hospedagem recebe apenas o CSS pronto.",
+  "scripts": {
+    "css": "tailwindcss -i entrada.css -o ../public_html/assets/css/site.css --minify",
+    "css:watch": "tailwindcss -i entrada.css -o ../public_html/assets/css/site.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.14"
+  }
+}
