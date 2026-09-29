@@ -28,17 +28,14 @@ require __DIR__ . '/inc/layout-topo.php';
       <p class="mt-4 text-lg leading-relaxed text-foreground/70">
         Nos envie seu currículo. Será um prazer trabalhar com você.
       </p>
-      <div class="mt-8 rounded-xl border border-border-subtle bg-surface-muted p-7">
-        <p class="text-sm leading-relaxed text-foreground/70">
-          <?php if ($vagas): ?>
-            Confira as vagas abertas abaixo. Mesmo que nenhuma combine com o seu perfil, envie seu
-            currículo: ele fica disponível para futuras oportunidades na World System.
-          <?php else: ?>
+      <?php if (!$vagas): ?>
+        <div class="mt-8 rounded-xl border border-border-subtle bg-surface-muted p-7">
+          <p class="text-sm leading-relaxed text-foreground/70">
             No momento não há vagas específicas divulgadas nesta página. Mesmo assim, currículos são
             bem-vindos e ficam disponíveis para futuras oportunidades na World System.
-          <?php endif; ?>
-        </p>
-      </div>
+          </p>
+        </div>
+      <?php endif; ?>
     <?= revelar_fecha() ?>
 
     <?php if ($vagas): ?>
