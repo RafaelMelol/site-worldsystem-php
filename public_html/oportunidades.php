@@ -21,6 +21,7 @@ require __DIR__ . '/inc/layout-topo.php';
 
 <section class="py-20 lg:py-28">
   <div class="mx-auto grid w-full max-w-7xl grid-cols-1 gap-16 px-6 lg:grid-cols-[1fr_1.3fr] lg:items-start lg:px-8">
+    <div class="flex flex-col gap-10">
     <?= revelar_abre() ?>
       <p class="text-xs font-semibold uppercase tracking-wide text-brand-fg">Trabalhe com a gente</p>
       <h1 class="mt-4 text-4xl font-bold tracking-tight text-foreground">Oportunidades</h1>
@@ -30,7 +31,7 @@ require __DIR__ . '/inc/layout-topo.php';
       <div class="mt-8 rounded-xl border border-border-subtle bg-surface-muted p-7">
         <p class="text-sm leading-relaxed text-foreground/70">
           <?php if ($vagas): ?>
-            Confira as vagas abertas ao lado. Mesmo que nenhuma combine com o seu perfil, envie seu
+            Confira as vagas abertas abaixo. Mesmo que nenhuma combine com o seu perfil, envie seu
             currículo: ele fica disponível para futuras oportunidades na World System.
           <?php else: ?>
             No momento não há vagas específicas divulgadas nesta página. Mesmo assim, currículos são
@@ -39,6 +40,54 @@ require __DIR__ . '/inc/layout-topo.php';
         </p>
       </div>
     <?= revelar_fecha() ?>
+
+    <?php if ($vagas): ?>
+      <div>
+        <?= revelar_abre(60) ?>
+          <h2 class="text-xs font-semibold uppercase tracking-wide text-foreground/40">
+            <?= count($vagas) === 1 ? 'Vaga aberta' : count($vagas) . ' vagas abertas' ?>
+          </h2>
+        <?= revelar_fecha() ?>
+
+        <div class="mt-4 flex flex-col gap-4">
+          <?php foreach ($vagas as $indice => $vaga): ?>
+            <?= revelar_abre(80 + $indice * 60) ?>
+              <article class="rounded-xl border border-border-subtle bg-surface p-5 transition-colors duration-300 ease-out hover:border-brand-200">
+                <h3 class="text-lg font-bold tracking-tight text-foreground"><?= e($vaga['titulo']) ?></h3>
+                <p class="mt-2 text-sm leading-relaxed text-foreground/70"><?= nl2br(e($vaga['descricao'])) ?></p>
+
+                <div class="mt-5 flex flex-col gap-4">
+                  <div>
+                    <p class="text-[11px] font-semibold uppercase tracking-wide text-foreground/40">Requisitos</p>
+                    <ul class="mt-2 flex flex-col gap-1.5">
+                      <?php foreach (linhas_em_lista($vaga['requisitos']) as $item): ?>
+                        <li class="flex items-start gap-2 text-sm text-foreground/70">
+                          <span aria-hidden="true" class="mt-[0.45rem] size-1 shrink-0 rounded-full bg-brand-500"></span>
+                          <?= e($item) ?>
+                        </li>
+                      <?php endforeach; ?>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <p class="text-[11px] font-semibold uppercase tracking-wide text-foreground/40">Benefícios</p>
+                    <ul class="mt-2 flex flex-col gap-1.5">
+                      <?php foreach (linhas_em_lista($vaga['beneficios']) as $item): ?>
+                        <li class="flex items-start gap-2 text-sm text-foreground/70">
+                          <span aria-hidden="true" class="mt-[0.45rem] size-1 shrink-0 rounded-full bg-accent-500"></span>
+                          <?= e($item) ?>
+                        </li>
+                      <?php endforeach; ?>
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            <?= revelar_fecha() ?>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    <?php endif; ?>
+    </div>
 
     <?= revelar_abre(100) ?>
       <div class="rounded-xl border border-border-subtle bg-surface p-7 transition-colors duration-300 ease-out hover:border-brand-200">
@@ -97,52 +146,5 @@ require __DIR__ . '/inc/layout-topo.php';
     <?= revelar_fecha() ?>
   </div>
 </section>
-
-<?php if ($vagas): ?>
-<section class="border-t border-border-subtle py-20 lg:py-24">
-  <div class="mx-auto w-full max-w-7xl px-6 lg:px-8">
-    <?= revelar_abre() ?>
-      <?= titulo_secao('Vagas abertas', count($vagas) === 1 ? 'Temos uma vaga aberta no momento' : 'Temos ' . count($vagas) . ' vagas abertas no momento', 'Confira os detalhes e envie seu currículo pelo formulário acima.') ?>
-    <?= revelar_fecha() ?>
-
-    <div class="mt-12 flex flex-col gap-6">
-      <?php foreach ($vagas as $indice => $vaga): ?>
-        <?= revelar_abre($indice * 60) ?>
-          <article class="rounded-xl border border-border-subtle bg-surface p-8 transition-colors duration-300 ease-out hover:border-brand-200 lg:p-10">
-            <h3 class="text-2xl font-bold tracking-tight text-foreground"><?= e($vaga['titulo']) ?></h3>
-            <p class="mt-3 max-w-3xl text-sm leading-relaxed text-foreground/70"><?= nl2br(e($vaga['descricao'])) ?></p>
-
-            <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-foreground/40">Requisitos</p>
-                <ul class="mt-3 flex flex-col gap-2.5">
-                  <?php foreach (linhas_em_lista($vaga['requisitos']) as $item): ?>
-                    <li class="flex items-start gap-2.5 text-sm text-foreground/70">
-                      <span aria-hidden="true" class="mt-[0.4rem] size-1.5 shrink-0 rounded-full bg-brand-500"></span>
-                      <?= e($item) ?>
-                    </li>
-                  <?php endforeach; ?>
-                </ul>
-              </div>
-
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-foreground/40">Benefícios</p>
-                <ul class="mt-3 flex flex-col gap-2.5">
-                  <?php foreach (linhas_em_lista($vaga['beneficios']) as $item): ?>
-                    <li class="flex items-start gap-2.5 text-sm text-foreground/70">
-                      <span aria-hidden="true" class="mt-[0.4rem] size-1.5 shrink-0 rounded-full bg-accent-500"></span>
-                      <?= e($item) ?>
-                    </li>
-                  <?php endforeach; ?>
-                </ul>
-              </div>
-            </div>
-          </article>
-        <?= revelar_fecha() ?>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-<?php endif; ?>
 
 <?php require __DIR__ . '/inc/layout-rodape.php'; ?>
