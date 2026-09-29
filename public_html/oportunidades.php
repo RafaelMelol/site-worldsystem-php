@@ -59,7 +59,7 @@ require __DIR__ . '/inc/layout-topo.php';
                     <ul class="mt-2 flex flex-col gap-1.5">
                       <?php foreach (linhas_em_lista($vaga['requisitos']) as $item): ?>
                         <li class="flex items-start gap-2 text-sm text-foreground/70">
-                          <span aria-hidden="true" class="mt-[0.45rem] size-1 shrink-0 rounded-full bg-brand-500"></span>
+                          <span aria-hidden="true" class="shrink-0 text-foreground/40">-</span>
                           <?= e($item) ?>
                         </li>
                       <?php endforeach; ?>
@@ -71,7 +71,7 @@ require __DIR__ . '/inc/layout-topo.php';
                     <ul class="mt-2 flex flex-col gap-1.5">
                       <?php foreach (linhas_em_lista($vaga['beneficios']) as $item): ?>
                         <li class="flex items-start gap-2 text-sm text-foreground/70">
-                          <span aria-hidden="true" class="mt-[0.45rem] size-1 shrink-0 rounded-full bg-accent-500"></span>
+                          <span aria-hidden="true" class="shrink-0 text-foreground/40">-</span>
                           <?= e($item) ?>
                         </li>
                       <?php endforeach; ?>
