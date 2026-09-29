@@ -48,10 +48,25 @@ function dentro_do_limite(string $chave, int $limite): bool
     return true;
 }
 
-/** Texto limpo: sem espaços nas pontas e sem quebras de linha escondidas. */
+/**
+ * Garante que o texto está em UTF-8.
+ *
+ * Quase todo navegador envia UTF-8, mas um cliente antigo (ou um robô) pode
+ * mandar em Windows-1252. Sem isso, o acento derruba a gravação no banco.
+ */
+function em_utf8(string $valor): string
+{
+    if ($valor === '' || !function_exists('mb_check_encoding') || mb_check_encoding($valor, 'UTF-8')) {
+        return $valor;
+    }
+
+    return mb_convert_encoding($valor, 'UTF-8', 'Windows-1252');
+}
+
+/** Texto limpo: sem espaços nas pontas e já em UTF-8. */
 function texto(string $campo): string
 {
-    return trim((string) ($_POST[$campo] ?? ''));
+    return trim(em_utf8((string) ($_POST[$campo] ?? '')));
 }
 
 /** Conta os caracteres do texto, mesmo sem a extensão mbstring instalada. */

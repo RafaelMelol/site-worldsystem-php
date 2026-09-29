@@ -3,3 +3,8 @@ node_modules/
 .idea/
 Thumbs.db
 .DS_Store
+
+# Arquivos com senha: cada máquina e a hospedagem têm o seu.
+public_html/inc/config-banco.php
+public_html/inc/config-admin.php
+senha-do-painel-local.txt

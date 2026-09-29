@@ -1,10 +1,20 @@
 <?php
-// Página Oportunidades: convite para enviar o currículo e o formulário de envio.
+// Página Oportunidades: vagas publicadas no painel e o formulário de currículo.
 
 require_once __DIR__ . '/inc/config.php';
+require_once __DIR__ . '/inc/vagas.php';
 
 $titulo = 'Oportunidades';
-$descricao = 'Envie seu currículo para a World System. Ainda não há vagas específicas divulgadas, mas teremos prazer em conhecer o seu perfil.';
+$descricao = 'Veja as vagas abertas na World System e envie seu currículo para participar dos nossos processos seletivos.';
+
+// Se o banco estiver fora do ar, a página continua funcionando: mostra o
+// formulário de currículo, sem a lista de vagas.
+try {
+    $vagas = vagas_publicadas();
+} catch (Throwable $erro) {
+    error_log('[vagas] ' . $erro->getMessage());
+    $vagas = [];
+}
 
 require __DIR__ . '/inc/layout-topo.php';
 ?>
@@ -19,15 +29,23 @@ require __DIR__ . '/inc/layout-topo.php';
       </p>
       <div class="mt-8 rounded-xl border border-border-subtle bg-surface-muted p-7">
         <p class="text-sm leading-relaxed text-foreground/70">
-          No momento não há vagas específicas divulgadas nesta página. Mesmo assim, currículos são
-          bem-vindos e ficam disponíveis para futuras oportunidades na World System.
+          <?php if ($vagas): ?>
+            Confira as vagas abertas ao lado. Mesmo que nenhuma combine com o seu perfil, envie seu
+            currículo: ele fica disponível para futuras oportunidades na World System.
+          <?php else: ?>
+            No momento não há vagas específicas divulgadas nesta página. Mesmo assim, currículos são
+            bem-vindos e ficam disponíveis para futuras oportunidades na World System.
+          <?php endif; ?>
         </p>
       </div>
     <?= revelar_fecha() ?>
 
     <?= revelar_abre(100) ?>
       <div class="rounded-xl border border-border-subtle bg-surface p-7 transition-colors duration-300 ease-out hover:border-brand-200">
-        <form id="form-curriculo" class="flex flex-col gap-5" novalidate enctype="multipart/form-data">
+        <h2 class="text-xl font-semibold text-foreground">Envie seu currículo</h2>
+        <p class="mt-1.5 text-sm text-foreground/60">Respondemos assim que houver uma oportunidade compatível.</p>
+
+        <form id="form-curriculo" class="mt-6 flex flex-col gap-5" novalidate enctype="multipart/form-data">
           <div class="hidden" aria-hidden="true">
             <label for="curriculo-website">Não preencha este campo</label>
             <input id="curriculo-website" name="website" type="text" tabindex="-1" autocomplete="off">
@@ -66,7 +84,8 @@ require __DIR__ . '/inc/layout-topo.php';
 
           <div class="flex flex-col gap-1.5">
             <label for="curriculo-observacoes" class="text-sm font-medium text-foreground">Observações</label>
-            <textarea id="curriculo-observacoes" name="observacoes" rows="4" class="campo min-h-32 resize-y"></textarea>
+            <textarea id="curriculo-observacoes" name="observacoes" rows="4" class="campo min-h-32 resize-y"
+              placeholder="Se quiser, diga para qual vaga está se candidatando."></textarea>
           </div>
 
           <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -78,5 +97,52 @@ require __DIR__ . '/inc/layout-topo.php';
     <?= revelar_fecha() ?>
   </div>
 </section>
+
+<?php if ($vagas): ?>
+<section class="border-t border-border-subtle py-20 lg:py-24">
+  <div class="mx-auto w-full max-w-7xl px-6 lg:px-8">
+    <?= revelar_abre() ?>
+      <?= titulo_secao('Vagas abertas', count($vagas) === 1 ? 'Temos uma vaga aberta no momento' : 'Temos ' . count($vagas) . ' vagas abertas no momento', 'Confira os detalhes e envie seu currículo pelo formulário acima.') ?>
+    <?= revelar_fecha() ?>
+
+    <div class="mt-12 flex flex-col gap-6">
+      <?php foreach ($vagas as $indice => $vaga): ?>
+        <?= revelar_abre($indice * 60) ?>
+          <article class="rounded-xl border border-border-subtle bg-surface p-8 transition-colors duration-300 ease-out hover:border-brand-200 lg:p-10">
+            <h3 class="text-2xl font-bold tracking-tight text-foreground"><?= e($vaga['titulo']) ?></h3>
+            <p class="mt-3 max-w-3xl text-sm leading-relaxed text-foreground/70"><?= nl2br(e($vaga['descricao'])) ?></p>
+
+            <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-foreground/40">Requisitos</p>
+                <ul class="mt-3 flex flex-col gap-2.5">
+                  <?php foreach (linhas_em_lista($vaga['requisitos']) as $item): ?>
+                    <li class="flex items-start gap-2.5 text-sm text-foreground/70">
+                      <span aria-hidden="true" class="mt-[0.4rem] size-1.5 shrink-0 rounded-full bg-brand-500"></span>
+                      <?= e($item) ?>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-foreground/40">Benefícios</p>
+                <ul class="mt-3 flex flex-col gap-2.5">
+                  <?php foreach (linhas_em_lista($vaga['beneficios']) as $item): ?>
+                    <li class="flex items-start gap-2.5 text-sm text-foreground/70">
+                      <span aria-hidden="true" class="mt-[0.4rem] size-1.5 shrink-0 rounded-full bg-accent-500"></span>
+                      <?= e($item) ?>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+            </div>
+          </article>
+        <?= revelar_fecha() ?>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
 
 <?php require __DIR__ . '/inc/layout-rodape.php'; ?>
